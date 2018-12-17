@@ -239,7 +239,7 @@ function LoadModelLayer(ModelID) {
 		// });
 
 
-		var Pval="",LCategory="", LayerID=0,ModelID={{$KerasModel->ModelID}};
+		var Pval="",LCategory="", LayerID=0,ModelID={{$KerasModel->ModelID ?? '-1'}};
 
 		// $("#btnfork").click(function(){
 		// 	url='{{url("/")}}/api/GenerateScript/'+ModelID;
