@@ -1,0 +1,13 @@
+table, th, td {page-break-inside:auto;border: 1px solid black}
+table { text-align:center;border-collapse: collapse;border-radius:22px; margin:0px;padding:0px;width:24cm;right:24px;top:24px;left:24px;position:relative; } 
+th{background-color:#C5C5C5;color:black;}
+th, td {  height:35px;font-size:small;}
+tr:nth-child(even){ background-color:#E5E5E5; } 
+tr:nth-child(odd){ background-color:#ffffff; }
+tr:hover {   background-color:#FFA417 }
+tr { page-break-inside:avoid; page-break-after:auto }
+thead { display:table-header-group }
+tfoot { display:table-footer-group }
+.jtable-selecting-column,.jtable-command-column-header,.jtable-command-column{
+    display: none;
+}
