@@ -49,7 +49,7 @@ class Controller extends BaseController
     public function UpdateSOrderDown( $Tname,$PKName,$FKName, $PKValue, $FKValue,$SOrder){
         $jTableResult =  array();
         $jTableResult['refresh'] =false;
-        $SQL="select count(*) as MaxOrder from $Tname where $FKName=". $FKValue;
+        $SQL="select count(*) as MaxOrder from $Tname where $FKName='". $FKValue."'";
         $Data=DB::select($SQL);
         $MaxOrder=$Data[0]->MaxOrder;
         if( $SOrder != $MaxOrder){
