@@ -82,9 +82,7 @@
 <body>
 
     @yield('content')
-    <div class="white-Background">
-        <div id="jtableContainer" class="@lang("messages.Clang")"></div>
-    </div>
+ 
 <script>
     var promptPosition="";
     @if (session("lang")=="ar" )

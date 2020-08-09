@@ -1985,7 +1985,7 @@ THE SOFTWARE.
 
             //Localization
             messages: {
-                addNewRecord: 'Add new Layer'
+                addNewRecord: 'Add new '
             }
         },
 

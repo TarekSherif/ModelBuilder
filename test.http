@@ -1,0 +1,18 @@
+
+@hostname = http://127.0.0.1
+@port = 8086
+@host = {{hostname}}:{{port}}
+
+@contentType = application/json 
+
+
+@ListOfDSModels_url = {{host}}/api/ListOfDSModels
+
+ POST {{ListOfDSModels_url}}?DSID=1&_token=LyEUjdXiQD2e9aeoV2cW7HE04onKWyF0as3Oq3KL
+Content-Type: application/json
+
+{
+  
+}
+
+

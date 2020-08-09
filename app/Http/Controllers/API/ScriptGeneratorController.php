@@ -9,6 +9,7 @@ class ScriptGeneratorController extends Controller
 {
     private $LayersType;  
     private $optimizerType;  
+    private $NotTrainable=[];
     
 
     public function GenerateScript($ModelID)
@@ -18,6 +19,7 @@ class ScriptGeneratorController extends Controller
         $Script =  array_merge(
                         $this->GenerateImportScript(),
                         $GenerateModelStructureScript,
+                        $this->NotTrainable,
                         $GenerateModelOptionScript
                     );
         
@@ -32,12 +34,11 @@ class ScriptGeneratorController extends Controller
    
          $Script =  array();
       
-         $Script [] ="
-        <span class='kn'></span><span class='kn'>import</span> <span class='nn'>keras</span> ";
-         $Script [] = $this->ImportStatement('keras.models','Sequential');
-         $Script [] =$this->ImportStatement('keras.layers',ltrim(rtrim( $this->LayersType,", ")) );
-         $Script [] =$this->ImportStatement('keras.optimizers',$this->optimizerType) ;
-         $Script [] =$this->ImportStatement('keras','regularizers') ;
+          
+         $Script [] = $this->ImportStatement('tensorflow.keras.models','Sequential');
+         $Script [] =$this->ImportStatement('tensorflow.keras.layers',ltrim(rtrim( $this->LayersType,", ")) );
+         $Script [] =$this->ImportStatement('tensorflow.keras.optimizers',$this->optimizerType) ;
+         $Script [] =$this->ImportStatement('tensorflow.keras','regularizers') ;
          return  $Script;
          
       }
@@ -46,22 +47,37 @@ class ScriptGeneratorController extends Controller
     
           $Script =  array();
        
-          
-          $SQL ="SELECT   *
-                  FROM `UModel`
-                  WHERE `ModelID` ='$ModelID'";
+          $SQL=" 
+          SELECT 
+              MLParameter.PName , MLParameter.PValue 
+         FROM MLParameter 
+          join KLParameter on MLParameter.PName=KLParameter.PName and MLParameter.ModelID=$ModelID
+          UNION
+              SELECT KLParameter.PName  , KLParameter.DefautValue from KLParameter 
+              WHERE 
+              KLParameter.LName is null and 
+              KLParameter.PName not in (
+                SELECT  MLParameter.PName    FROM MLParameter WHERE  MLParameter.ModelID=$ModelID
+          )";
+        
 
-       $Models= DB::select($SQL);
-       if(!empty($Models)  )
+       
+          $ModelOption=array();
+          $ModelsArray = json_decode(json_encode(DB::select($SQL)), true);
+          foreach ($ModelsArray as $Option) {
+            $ModelOption[$Option["PName"]]=$Option["PValue"];
+          }
+          
+       
+       if(!empty($ModelOption)  )
        {
-           $Model=$Models[0];
+            
            
-        $Script [] ="
-        model.compile(optimizer=". $Model->optimizer.",
-        loss=<span class='s1'>'". $Model->loss."'</span>,
-        metrics=[<span class='s1'>'". $Model->metrics."'</span>])
-        H1= model.fit(X_train, Y_train, batch_size = ". $Model->batch_size.", epochs = ". $Model->epochs.") ";
-        $this->optimizerType=substr($Model->optimizer, 0, strpos( $Model->optimizer,'('));
+            $Script [] ="\nmodel.compile(optimizer=". $ModelOption["optimizer"].",
+            loss=<span class='s1'>'". $ModelOption["loss"]."'</span>,
+            metrics=[<span class='s1'>'". $ModelOption["metrics"]."'</span>])";
+            $Script [] ="\nH1= model.fit(X_train, Y_train, batch_size = ". $ModelOption["batch_size"].", epochs = ". $ModelOption["epochs"].") ";
+            $this->optimizerType=substr($ModelOption["optimizer"], 0, strpos( $ModelOption["optimizer"],'('));
        }
 
         
@@ -70,40 +86,43 @@ class ScriptGeneratorController extends Controller
   
       private function ImportStatement($nn,$n)
       {
-       return "
-        <span class='kn'>from</span> <span class='nn'>$nn</span> <span class='k'>import</span> <span class='n'>$n</span> ";
+       return "\n<span class='kn'>from</span> <span class='nn'>$nn</span> <span class='k'>import</span> <span class='n'>$n</span> ";
       }
       private function GenerateModelStructureScript($ModelID)
       {
           $Script =  array();
           $this->LayersType=" ";
-          $Script [] ="
-        model = Sequential()";
+          $Script [] ="\nmodel = Sequential()";
 
           
-          $SQL ="SELECT   `LayerID` , `LCategory`
+          $SQL ="SELECT   `LayerID` ,`LName`, `LCategory`,`trainable`
                   FROM `MLayer`
-                  WHERE `ModelID` ='$ModelID'";
+                  WHERE `ModelID` ='$ModelID'
+                  ORDER BY `MLayer`.`SOrder` ASC";
 
        $Layers= DB::select($SQL);
        if(!empty($Layers)  )
        {
            foreach ($Layers as  $Layer) {
-            $Script [] =$this->GenerateLayerScript($Layer->LayerID ,$Layer->LCategory);
+                $trainable="\n";
+                if($Layer->trainable==0){
+                    $trainable=$trainable.$Layer->LName."=";
+                    $this->NotTrainable[]="\n".$Layer->LName.".trainable = False";
+                }
+                 
+                $Script [] =$trainable.$this->GenerateLayerScript($Layer->LayerID ,$Layer->LCategory);
 
-            $this->LayersType=( strpos( $this->LayersType,$Layer->LCategory) == false )? $this->LayersType . $Layer->LCategory .",":$this->LayersType;
+                $this->LayersType=( strpos( $this->LayersType,$Layer->LCategory) == false )? $this->LayersType . $Layer->LCategory .",":$this->LayersType;
            }
        }
-          $Script [] ="
-        model.summary()";
+ 
           return  $Script;
        }
        private function GenerateLayerScript($LayerID,$LCategory)
        {
            $LayerScript = "";
            $LayerScript = $LCategory ."(".$this->GenerateLayerParameterScript($LayerID,$LCategory).")";
-           return "
-        model.add(".$LayerScript.")";
+           return "model.add(".$LayerScript.")";
         }
         private function GenerateLayerParameterScript($LayerID,$LCategory)
         {

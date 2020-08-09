@@ -76,7 +76,23 @@ Route::post('CreateLayer', 'API\ActionLayerController@CreateLayer');
 Route::post('UpdateLayer', 'API\ActionLayerController@UpdateLayer');
 Route::post('DeleteLayer', 'API\ActionLayerController@DeleteLayer');
 //=========================================================================
+
+
+//========================================================================
+// ActionDSModelsController-urls  
+//========================================================================
+Route::post('ListOfDSModels', 'API\ActionDSModelController@ListOfDSModels');
+Route::post('CreateDSModel', 'API\ActionDSModelController@CreateDSModel');
+Route::post('UpdateDSModel', 'API\ActionDSModelController@UpdateDSModel');
+Route::post('DeleteDSModel', 'API\ActionDSModelController@DeleteDSModel');
+//=========================================================================
+
 Route::post('LayerListoptions', 'API\ActionLayerController@LayerListoptions');
+Route::post('DSListoptions', 'API\ActionDSModelController@DSListoptions');
+Route::post('ModelListoptions', 'API\ActionDSModelController@ModelListoptions');
+
+
+ 
 
 
 
@@ -90,10 +106,17 @@ Route::post('UpdateKFunction', 'API\ActionKFunctionController@UpdateKFunction');
 Route::post('DeleteKFunction', 'API\ActionKFunctionController@DeleteKFunction');
 Route::get('ListOfACLayerType', 'API\ActionKFunctionController@ListOfACLayerType');
 Route::get('ListOfACType/{Type}', 'API\ActionKFunctionController@ListOfACType');
-Route::get('ListOfACModel', 'API\ActionKFunctionController@ListOfACModel');
 
-Route::get('GetLayerParameters/{LayerID}/{LType}', 'API\ActionKFunctionController@GetLayerParameters');
-Route::get('AutoSave/{LayerID}/{PName}/{PValue}', 'API\ActionKFunctionController@AutoSave');
+
+ 
+Route::get('ListOfACModel', 'API\ActionKFunctionController@ListOfACModel');
+Route::get('ListOfACDS', 'API\ActionDSModelController@ListOfACDS');
+
+Route::get('GetLayerParameters/{ObjectID}/{LType}', 'API\ActionKFunctionController@GetLayerParameters');
+Route::post('ListOfChangedLayerParameters/{LayerID}', 'API\ActionKFunctionController@ListOfChangedLayerParameters');
+
+
+Route::get('AutoSave/{ObjectID}/{PName}/{PValue}', 'API\ActionKFunctionController@AutoSave');
 
 Route::get('GenerateScript/{ModelID}', 'API\ScriptGeneratorController@GenerateScript');
  

@@ -20,6 +20,7 @@ Route::get('Permission', 'SettingController@Permission');
 
 
 Route::resource('KerasModel','KerasModelController');
+Route::resource('DS','DSController');
 
  
 

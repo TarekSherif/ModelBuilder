@@ -9,7 +9,7 @@
       <!-- search form -->
       <form action="#" method="get" class="navbar-form">
         <div class="input-group">
-          <input type="text" class="form-control" id="top-search" placeholder="@lang('messages.Search')...">
+          <input type="text" class="form-control  " id="top-search" placeholder="@lang('messages.Search')...">
           <span class="input-group-btn">
                         <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                         </button>
@@ -29,30 +29,34 @@
     </li>
 
     <li class="dropdown notifications-menu" >
-      <a href="#" class="dropdown-toggle">
-          {{-- <i class="fa fa-bell-o"></i> 
-          
-          fa-magic
-          
-          --}}
-          <i class="fa fa-bell-o" ></i>
-
-          
-          
-          <span class="label label-danger"  id="notificationsCount" ></span> 
-         {{--  
-           <span class="label label-warning">10</span>
-           <span class="label label-success">4</span>
-          <span class="label label-danger">9</span> 
-          --}}
-        </a>
-
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <i class="fa fa-tags"></i>
+         
+      </a>
       <ul class="dropdown-menu">
 
-       
+        <li>
+          <!-- inner menu: contains the actual data -->
+          <ul class="menu">
+            <li>
+              <a class='@lang("messages.CNotlang")' href="#">
+                    <i class="fa fa-tags"></i>
+                    2.2.0
+                  </a>
+
+            </li>
+            <!-- Menu Body -->
+            <li>
+              <a class='@lang("messages.CNotlang")' href="#">
+                    <i class="fa fa-tags"></i>
+                    2.2.4-tf
+                  </a>
+
+            </li>
+          </ul>
+        </li>
 
       </ul>
-
 
     </li>
     <!-- Tasks: style can be found in dropdown.less -->

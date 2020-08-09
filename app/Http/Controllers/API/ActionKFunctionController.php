@@ -7,26 +7,83 @@ use App\Http\Controllers\Controller;
 
 class ActionKFunctionController extends Controller
 {
+
+    public function ListOfChangedLayerParameters($LayerID)
+    {
+        $jTableResult =  array();
+   
+          try
+          {
+             
+                $SQL="select 
+                             PID, PName , PValue  
+                    from MLParameter 
+                    where LayerID=$LayerID";
+     
+              $Data= DB::select($SQL);
+             
+                  $jTableResult['Result'] = "OK";
+                  $jTableResult['Records'] =$Data;
+                 
+              }
+              catch(Exception $ex)
+              {
+                  //Return error Message
+                  $jTableResult['Result'] = "ERROR";
+                  $jTableResult['Message'] = $ex->getMessage();
+                 
+              }
+              return response()->json($jTableResult);
+              }
+
     
-    public function GetLayerParameters($LayerID,$LType)
+    //ObjectID= LayerID,ModelID
+    // $OType=Model,LayerType
+    public function GetLayerParameters($ObjectID,$OType)
     {
       $Result =  array();
    
           try
           {
-         
-            $SQL="select 
-                    MLParameter.PName , MLParameter.PValue , KLParameter.PType 
-                     from MLParameter 
-                     join KLParameter on MLParameter.PName=KLParameter.PName and MLParameter.LayerID=$LayerID
-                UNION
-                SELECT KLParameter.PName  , KLParameter.DefautValue, KLParameter.PType  from KLParameter 
+            $SQL="";
+            if($OType=="Model"){
+                $SQL=" 
+                select 
+                   MLParameter.PName , MLParameter.PValue , KLParameter.PType ,KLParameter.`SOrder` 
+                 from MLParameter   
+                 join KLParameter on MLParameter.PName=KLParameter.PName and MLParameter.ModelID=$ObjectID
                 WHERE 
-                KLParameter.LName='$LType' and 
+                      KLParameter.LName is null 
+               UNION
+               SELECT 
+                    KLParameter.PName  , KLParameter.DefautValue, KLParameter.PType, `SOrder`
+                from KLParameter 
+                WHERE 
+                KLParameter.LName is null and 
                 KLParameter.PName not in (
-                select  MLParameter.PName    from MLParameter where  MLParameter.LayerID=$LayerID
-            )"; 
-
+                    select 
+                         MLParameter.PName 
+                    from MLParameter 
+                    where  MLParameter.ModelID=$ObjectID)
+                ORDER BY  `SOrder` ASC
+                
+         
+                ";
+         }
+         else{
+                $SQL="select 
+                    MLParameter.PName , MLParameter.PValue , KLParameter.PType 
+                    from MLParameter 
+                    join KLParameter on MLParameter.PName=KLParameter.PName and MLParameter.LayerID=$ObjectID
+                UNION
+                    SELECT KLParameter.PName  , KLParameter.DefautValue, KLParameter.PType  from KLParameter 
+                    WHERE 
+                    KLParameter.LName='$OType' and 
+                    KLParameter.PName not in (
+                    select  MLParameter.PName    from MLParameter where  MLParameter.LayerID=$ObjectID
+                ORDER BY  `SOrder` ASC
+            )";
+         }
               $Data= DB::select($SQL);
              
               $Result =$Data;
@@ -49,10 +106,15 @@ class ActionKFunctionController extends Controller
    
           try
           {
-            $where="'".((isset($_GET['term']))?$_GET['term']:"")."%'";
+          
+            $whereUModel=  " and  MName like   '".((isset($_GET['term']))?$_GET['term']:"")."%'";
+            $whereMyModelOnly= ( isset($_GET['UID']))?" and createby=".$_GET['UID']:"";
+
             $SQL="SELECT `ModelID`, `MName` as label
                    FROM `UModel` 
-                   where   MName like  $where"; 
+                   where   1=1 
+                   $whereUModel
+                   $whereMyModelOnly"; 
 
               $Data= DB::select($SQL);
              
@@ -217,15 +279,21 @@ class ActionKFunctionController extends Controller
                   return response()->json($jTableResult);
               }
       
-              public function AutoSave( $LayerID,$PName,$PValue)
+              public function AutoSave( $ObjectID,$PName,$PValue)
               {
                   $jTableResult =  array();
               
                       try
                       {
-      
-                        $SQL ="SELECT * FROM MLParameter
-                              where `LayerID`='$LayerID' and `PName`='$PName' ";
+                        if(strpos($PName, "Model_") !== false){
+                            $PName= str_replace("Model_", '', $PName);
+                            $where =" where `ModelID`='$ObjectID' and `PName`='$PName'";
+                            $INSERT="INSERT INTO `MLParameter`( `PName`, `PValue`, `ModelID`) VALUES ('$PName','$PValue','$ObjectID')";
+                        } else{
+                            $where =" where`LayerID`='$ObjectID' and `PName`='$PName'";
+                            $INSERT="INSERT INTO `MLParameter`( `PName`, `PValue`, `LayerID`) VALUES ('$PName','$PValue','$ObjectID')";
+                        }
+                        $SQL ="SELECT * FROM MLParameter". $where ;
                   
                   
                         $Data= DB::select($SQL);
@@ -234,14 +302,13 @@ class ActionKFunctionController extends Controller
                         {
                              //Update MLParameter in database
                           $SQL="UPDATE `MLParameter` SET
-                          `PValue` = '$PValue'
-                          where `LayerID`='$LayerID' and `PName`='$PName' ";
+                          `PValue` = '$PValue' ".$where ;
                           DB::update($SQL);
                         }
                         else {
                             //Insert MLParameter in database
-                            $SQL="INSERT INTO `MLParameter`( `PName`, `PValue`, `LayerID`) VALUES ('$PName','$PValue','$LayerID')";
-                            DB::insert($SQL);
+                         
+                            DB::insert($INSERT);
                         }
                      
                           //Return result to jTable

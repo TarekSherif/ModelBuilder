@@ -21,11 +21,7 @@
 
         @yield('CoreContent')
         
-        @if($jtable)
-            <div class="white-Background">
-                    <div id="jtableContainer" class="@lang("messages.Clang")"></div>
-            </div>
-        @endif
+      
     </section>
 </div>
     @include('layouts.inc.footer') @yield('ScriptContent')

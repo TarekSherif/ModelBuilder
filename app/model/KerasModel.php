@@ -9,6 +9,8 @@ class KerasModel extends Model
     //
     protected $table = 'UModel';
     protected $primaryKey = 'ModelID';
-    protected $fillable = ['MName','ETrain','ETest' ,'optimizer','loss','metrics','batch_size','epochs','createby'  ];
+    protected $fillable = ['MName','createby'  ];
+
+ 
     
 }

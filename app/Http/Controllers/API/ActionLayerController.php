@@ -18,9 +18,18 @@ class ActionLayerController extends Controller
         
               try
               {
-                  $SQL ="SELECT * FROM MLayer
-                          where ModelID='".$_GET["ModelID"]."'
-                          order by SOrder  ";
+                  $ModelID=$_GET["ModelID"];
+                  $SQL ="SELECT `MLayer`.`LayerID`,
+                                `MLayer`.`LName`,
+                                `MLayer`.`LCategory`,
+                                `MLayer`.`trainable`,
+                                `MLayer`.`ModelID`,
+                                `MLayer`.`SOrder`,
+                                `KLayer`.`HelpUrl`
+                         FROM `MLayer`
+                         LEFT join `KLayer` ON `MLayer`.`LCategory`=`KLayer`.`LName`  
+                         Where `MLayer`.`ModelID`='$ModelID'
+                         order by SOrder  ";
                   
                   
                   $Data= DB::select($SQL );

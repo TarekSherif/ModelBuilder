@@ -2,7 +2,16 @@
 
 return [
     'Pname'=>'ModelBuilder',
-    'MName'=>'ModelBuilder',
+    'MiniName'=>'MB',
+    
+
+    
+    'Models'=>'النماذج',
+    'MName'=>'اسم النموذج',
+
+    'DS'=>'مجموعات البيانات',
+    'DS.Name'=>'اسم  مجموعة البيانات',
+    'DS.URL'=>'رابط  مجموعة البيانات',
     //menu Pages
     
     'Settings'=>'الاعدادات',
@@ -45,6 +54,8 @@ return [
 
     //css
     'Clang'=>'ar',
+    'CNotlang'=>'en',
+
  
  // Users
     'email'=>'البريد الالكتروني',
@@ -57,18 +68,13 @@ return [
     
     'SOrder'=>'ترتيب الظهور',
 
+   //  KerasModel
     'KerasModel.create'=>'اضافة نموذج',
     'KerasModel.edit'=>'تعديل النموذج',
         
-    'ETrain'=>' اخطاء التعلم',
-    'ETest'=>' اخطاء الاختبار',
-       
-    'ModelOptions'=>'اعدادات النموذج',
-    'optimizer' =>'optimizer',
-    'loss' =>'loss',
-    'metrics'=>'metrics',
-    'batch_size'=>'batch_size',
-    'epochs' =>'epochs',
+   //   DS
+   'DS.create'=>'اضافة مجموعة بيانات',
+   'DS.edit'=>'تعديل مجموعة بيانات',
 
 
      //layer
@@ -79,4 +85,12 @@ return [
      'Layers'=>'الطبقات',
 
 
+     //DSModels
+   //   `DSID`  ,`ModelID`  , ``,   `Train_score`,   `Val_loss`,   `Val_score`,  `Test_loss`,   `Test_score`, `SOrder`
+     'Train_loss'=>'Train_loss',
+     'Train_score'=>'Train_score',
+     'Val_loss'=>'Val_loss',
+     'Val_score'=>'Val_score',
+     'Test_loss'=>'Test_loss',
+     'Test_score'=>'Test_score',
 ];

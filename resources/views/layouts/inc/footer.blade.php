@@ -1,17 +1,21 @@
 <!-- /.content-wrapper -->
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-        <b>Version</b> 1.0
+        <b>Version</b> 2.0
     </div>
-    <strong>Copyright &copy; 2018 <a href="mailto:Eng.Tarek.Sherif@gmail.com">Tarek Sherif</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2020 <a href="mailto:Eng.Tarek.Sherif@gmail.com">Tarek Sherif</a>.</strong> All rights reserved.
 </footer>
 
 <!-- Control Sidebar -->
-<aside class="control-sidebar control-sidebar-dark">
+
+<aside class="control-sidebar control-sidebar-dark" style="
+    height: 90%;
+    overflow: scroll;
+    
+    overflow-x: hidden;
+" >
     <!-- Create the tabs -->
-    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-        <li class="active"><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-    </ul>
+
     <!-- Tab panes -->
     <div class="tab-content">
 
@@ -29,8 +33,8 @@
 <!-- /.control-sidebar -->
 <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
-<div class="control-sidebar-bg"></div>
-</div>
+<!-- <div class="control-sidebar-bg"></div>
+</div> -->
 
 
 
@@ -62,11 +66,47 @@
 @endif
 
 <script type="text/javascript">
-
-
+ 
 
     $(function () {
+        function sidebarSearch(term="") {
+            $.get( "{{url("/")}}/api/ListOfACModel?term="+term+"&UID={{Auth::user()->id}}&_token={{ csrf_token() }}", function( data ) {
+                $('#model-list').empty();
+                data.forEach(function(element, i) { 
 
+                    $('#model-list').append(`
+                        <li >
+                            <a href="{{url('/')}}/KerasModel/${element.ModelID}/edit" >
+                                    <i class="fa fa-pencil-square-o  sidebar-nav-icon"></i>
+                                    <span class="sidebar-nav-mini-hide">
+                                        ${element.label}
+                                    </span>
+                                </a>
+                             
+                        </li>`);
+                
+                });
+            });
+            $.get( "{{url("/")}}/api/ListOfACDS?term="+term+"&UID={{Auth::user()->id}}&_token={{ csrf_token() }}&_token={{ csrf_token() }}", function( data ) {
+                $('#ds-list').empty();
+                data.forEach(function(element, i) { 
+               
+                    $('#ds-list').append(`
+                        <li >
+                            <a href="{{url('/')}}/DS/${element.DSID}/edit" >
+                                    <i class="fa fa-database  sidebar-nav-icon"></i>
+                                    <span class="sidebar-nav-mini-hide">
+                                        ${element.label}
+                                    </span>
+                                </a>
+                             
+                        </li>`);
+                
+                });
+            });
+       }
+       
+      
       $('#top-search').autocomplete({
            source: '{{url("/")}}/api/ListOfACModel?_token={{ csrf_token() }}',
            select: function (e, ui) {
@@ -74,11 +114,16 @@
              
            }
        });
-   
        
+       $('#sidebar-search').on('keyup',   function(){
+             sidebarSearch( $(this).val());
+        });
+
+      
+       sidebarSearch(); 
    
 
-
+      
   
       $('[data-toggle="push-menu"]').on('click', function (e) {
           e.preventDefault();

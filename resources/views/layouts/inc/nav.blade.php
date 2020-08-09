@@ -2,9 +2,9 @@
     <!-- Logo -->
     <a href="index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"> @lang('messages.MName')</span>
+        <span class="logo-mini"> @lang('messages.MiniName')</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"> @lang('messages.MName')</span>
+        <span class="logo-lg"> @lang('messages.Pname')</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -33,12 +33,14 @@
 
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
-            {{-- <li class="header">MAIN NAVIGATION</li>
+              
+       
             <li class="">
                 <!-- search form -->
                 <form action="#" method="get" class="sidebar-form">
                     <div class="input-group">
-                        <input type="text" class="form-control"  placeholder="@lang(" messages.Search ")...">
+                        <input type="text" class="form-control  " id="sidebar-search"   placeholder="@lang('messages.Search')..." autocomplete="off">
+
                         <span class="input-group-btn">
                         <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                         </button>
@@ -46,20 +48,33 @@
                     </div>
                 </form>
                 <!-- /.search form -->
-
-
-
-            </li> --}}
-      
-            <li class="{{ $view_name == "create" ? "active" : "" }} ">
-                <a href="{{url('/')}}/KerasModel/create" >
-                        <i class="fa fa-plus sidebar-nav-icon"></i>
-                        <span class="sidebar-nav-mini-hide">
-                                @lang('messages.KerasModel.create')
-                        </span>
+            <li class="header"  title=" @lang('messages.Models')"> 
+            @lang('messages.Models')
+            <a href="{{url('/')}}/KerasModel/create"  class="pull-right"  title=" @lang('messages.KerasModel.create')" >
+                        <i class="fa fa-plus sidebar-nav-icon"  ></i>
+                        
                     </a>
             </li>
- 
+            
+        </ul>
+        <ul class="sidebar-menu " id="model-list" data-widget="tree">
+            
+           
+            
+        </ul>
+        <ul class="sidebar-menu" data-widget="tree">
+        <li class="header" >
+            @lang('messages.DS')
+            <a href="{{url('/')}}/DS/create"  class="pull-right" title=" @lang('messages.DS.create')" >
+                        <i class="fa fa-plus sidebar-nav-icon"  ></i>
+                        
+                    </a>
+            </li>
+            
+        </ul>
+        <ul class="sidebar-menu " id="ds-list" data-widget="tree">
+            
+           
             
         </ul>
     </section>

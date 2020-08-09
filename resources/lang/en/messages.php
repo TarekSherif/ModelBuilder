@@ -2,7 +2,14 @@
 
 return [
     'Pname'=>'ModelBuilder',
-    'MName'=>'ModelBuilder',
+    'MiniName'=>'MB',
+   
+    'Models'=>'Models',
+    'MName'=>'Model Name',
+
+    'DS'=>'Data Sets',
+    'DS.Name'=>'Data Set Name',
+    'DS.URL'=>'Data Set URL ',
     //menu
      
     'Settings'=>'Settings',
@@ -37,7 +44,7 @@ return [
     'RName'=>'Department',
     //css
     'Clang'=>'en',
-
+    'CNotlang'=>'ar',
 
  // Users
     'email'=>'email',
@@ -56,27 +63,27 @@ return [
     'select'=>'select',
      
     
-
+// KerasModel
      'KerasModel.create'=>'Create Model',
      'KerasModel.edit'=>'Edit Model',
+
+   //   DS
+     'DS.create'=>'Create Data set',
+     'DS.edit'=>'Edit Data set',
      
-     'ETrain'=>'Error  Train',
-     'ETest'=>'Error Test',
-
-     'ModelOptions'=>'Model Options',
-     'optimizer' =>'optimizer',
-     'loss' =>'loss',
-     'metrics'=>'metrics',
-     'batch_size'=>'batch_size',
-     'epochs' =>'epochs',
-
-
       //layer
       'LCategory'=>'Layer Type',
-      'LName'=>'Layer',
+      'LName'=>'Layer Name',
       'trainable'=>'trainable',
       'nottrainable'=>'not trainable',
       'Layers'=>'Layers',
 
- 
+      //DSModels
+   //   `DSID`  ,`ModelID`  , ``,   `Train_score`,   `Val_loss`,   `Val_score`,  `Test_loss`,   `Test_score`, `SOrder`
+     'Train_loss'=>'Train_loss',
+     'Train_score'=>'Train_score',
+     'Val_loss'=>'Val_loss',
+     'Val_score'=>'Val_score',
+     'Test_loss'=>'Test_loss',
+     'Test_score'=>'Test_score',
 ];
