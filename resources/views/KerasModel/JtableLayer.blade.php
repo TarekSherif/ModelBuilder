@@ -131,6 +131,7 @@ function LoadModelLayer(ModelID) {
                                         title:   ' Layer Parameters',
                                         actions: {
 											listAction:   '{{url("/")}}/api/ListOfChangedLayerParameters/'+LayerData.record.LayerID+'?_token={{ csrf_token() }}',
+											deleteAction: '{{url("/")}}/api/DeleteLayerParameter?_token={{ csrf_token() }}'
                                         },
                                         fields: {
                                          

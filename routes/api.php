@@ -114,6 +114,7 @@ Route::get('ListOfACDS', 'API\ActionDSModelController@ListOfACDS');
 
 Route::get('GetLayerParameters/{ObjectID}/{LType}', 'API\ActionKFunctionController@GetLayerParameters');
 Route::post('ListOfChangedLayerParameters/{LayerID}', 'API\ActionKFunctionController@ListOfChangedLayerParameters');
+Route::post('DeleteLayerParameter', 'API\ActionKFunctionController@DeleteLayerParameter');
 
 
 Route::get('AutoSave/{ObjectID}/{PName}/{PValue}', 'API\ActionKFunctionController@AutoSave');

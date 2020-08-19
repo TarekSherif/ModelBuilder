@@ -39,6 +39,31 @@ class ActionKFunctionController extends Controller
     
     //ObjectID= LayerID,ModelID
     // $OType=Model,LayerType
+
+    
+    //Deleting a record (deleteAction)
+    public function DeleteLayerParameter()
+    {
+      $jTableResult =  array();
+          try
+          {
+                  //Delete from database
+                  $SQL="DELETE FROM   MLParameter 
+                         where PID= " . $_POST["PID"] . ";";
+                  DB::update($SQL);
+                  //Return result to jTable
+                  $jTableResult['Result'] = "OK";
+               
+          }
+          catch(Exception $ex)
+          {
+              //Return error Message
+              $jTableResult['Result'] = "ERROR";
+              $jTableResult['Message'] = $ex->getMessage();
+         }
+      return response()->json($jTableResult);
+}
+
     public function GetLayerParameters($ObjectID,$OType)
     {
       $Result =  array();
